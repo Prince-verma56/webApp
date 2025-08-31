@@ -1,6 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/products';
+const API_URL = import.meta.env.VITE_API_URL || 'https://web-app-kohl-theta.vercel.app/api/products';
 
-// Helper function for API requests
 const apiRequest = async (url, method, data = null) => {
   const options = {
     method,

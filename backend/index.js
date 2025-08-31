@@ -23,7 +23,7 @@ const port = process.env.PORT || 7000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: "https://web-app-bwbg.vercel.app", 
     credentials: true, 
   })
 );
