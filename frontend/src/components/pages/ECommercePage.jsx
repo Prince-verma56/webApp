@@ -97,7 +97,7 @@ const CreateProduct = () => {
     }
 
     try {
-      await axios.post("http://localhost:7000/api/products", data, {
+      await axios.post("https://web-app-kohl-theta.vercel.app/api/products", data, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });

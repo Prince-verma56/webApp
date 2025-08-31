@@ -44,19 +44,17 @@ export default function PremiumLandingPage() {
 
       if (targetElement) {
         window.scrollTo({
-          top: targetElement.offsetTop - 70, // Adjust for fixed header height
+          top: targetElement.offsetTop - 70,
           behavior: "smooth",
         });
       }
     };
 
-    // Attach the event listener to all nav links.
     const navLinks = document.querySelectorAll("nav a");
     navLinks.forEach((link) => {
       link.addEventListener("click", handleSmoothScroll);
     });
 
-    // Clean up the event listener when the component unmounts.
     return () => {
       navLinks.forEach((link) => {
         link.removeEventListener("click", handleSmoothScroll);
@@ -65,8 +63,7 @@ export default function PremiumLandingPage() {
   }, []);
 
   useEffect(() => {
-    // We need to access GSAP and ScrollTrigger from the global window object
-    // since we are loading them via CDN in the JSX.
+
     const gsap = window.gsap;
     const ScrollTrigger = window.ScrollTrigger;
     
@@ -76,13 +73,11 @@ export default function PremiumLandingPage() {
     }
 
     const ctx = gsap.context(() => {
-      // Hero section: This is a static animation, so it doesn't need ScrollTrigger
       const tl = gsap.timeline();
       tl.from(heroRef.current, { opacity: 0, duration: 0.6, y: 20 });
       tl.from(heroTitleRef.current, { opacity: 0, y: 30, duration: 0.8 }, "-=0.15");
       tl.from(heroCtaRef.current, { opacity: 0, y: 20, duration: 0.6 }, "-=0.45");
 
-      // Features section: Stagger animation on scroll
       gsap.from(featuresRef.current.children, {
         opacity: 0,
         y: 30,
@@ -95,7 +90,6 @@ export default function PremiumLandingPage() {
         },
       });
 
-      // How it works steps: Stagger reveal
       gsap.from(stepsRef.current.children, {
         opacity: 0,
         x: -30,
@@ -108,7 +102,6 @@ export default function PremiumLandingPage() {
         },
       });
 
-      // Testimonials: Stagger animation
       gsap.from(testimonialsRef.current.children, {
         opacity: 0,
         y: 30,
@@ -121,7 +114,6 @@ export default function PremiumLandingPage() {
         },
       });
 
-      // Comparison section: Single element reveal
       gsap.from(compareRef.current, {
         opacity: 0,
         y: 30,
@@ -133,7 +125,6 @@ export default function PremiumLandingPage() {
         },
       });
 
-      // CTA section: Single element reveal
       gsap.from(ctaRef.current, {
         opacity: 0,
         scale: 0.98,
@@ -149,7 +140,7 @@ export default function PremiumLandingPage() {
     return () => ctx.revert();
   }, []);
 
-  // sample content
+ 
   const features = [
     {
       icon: <LineChart className="h-10 w-10" />,
@@ -194,7 +185,6 @@ export default function PremiumLandingPage() {
 
   return (
     <div style={{ backgroundColor: COLORS.bg, color: COLORS.text, minHeight: "100vh" }}>
-      {/* small CSS variables for consistent usage */}
       <style>{`
         :root{
           --bg:${COLORS.bg};
@@ -207,13 +197,10 @@ export default function PremiumLandingPage() {
       `}</style>
       
       {/*
-        The GSAP libraries are loaded here via CDN links.
-        This is necessary because the environment doesn't support npm imports.
       */}
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
 
-      {/* Navbar */}
       <header
         className="sticky top-0 z-50"
         style={{ background: COLORS.lightCard, borderBottom: `1px solid ${COLORS.border}` }}
@@ -260,7 +247,6 @@ export default function PremiumLandingPage() {
             </div>
           </div>
 
-          {/* illustration / decorative card */}
           <div className="relative">
             <div style={{
               background: `linear-gradient(180deg, ${COLORS.card}, rgba(255,255,255,0.06))`,
@@ -293,7 +279,6 @@ export default function PremiumLandingPage() {
               </div>
             </div>
 
-            {/* subtle decorative shape */}
             <svg className="absolute -bottom-8 -right-8" width="240" height="140">
               <defs>
                 <linearGradient id="g" x1="0" x2="1">
@@ -337,7 +322,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* How it works */}
       <section id="how" className="max-w-7xl mx-auto px-6 py-16" style={{ background: COLORS.lightCard }}>
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold" style={{ color: COLORS.text }}>How it works</h2>
@@ -360,7 +344,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section id="testimonials" className="max-w-7xl mx-auto px-6 py-16">
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold" style={{ color: COLORS.lightCard }}>Trusted by users</h2>
@@ -389,7 +372,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* Comparison */}
       <section ref={compareRef} className="max-w-7xl mx-auto px-6 py-16" style={{ background: COLORS.lightCard }}>
         <div className="mb-6 text-center">
           <h2 className="text-3xl font-bold" style={{ color: COLORS.text }}>MindSpace vs Traditional</h2>
@@ -420,7 +402,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section ref={ctaRef} className="max-w-7xl mx-auto px-6 py-16">
         <div className="rounded-2xl p-10 text-center" style={{ background: COLORS.highlight }}>
           <h2 className="text-3xl md:text-4xl font-bold text-white">Ready to try MindSpace?</h2>
@@ -432,7 +413,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer style={{ background: COLORS.text, color: "white" }} className="py-10 mt-8">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-6 items-center">
           <div>

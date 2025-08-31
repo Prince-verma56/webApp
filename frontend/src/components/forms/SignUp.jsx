@@ -45,7 +45,7 @@ function Signup() {
       setError("");
 
       const res = await axios.post(
-        "http://localhost:7000/auth/signup",
+        "https://web-app-kohl-theta.vercel.app/auth/signup",
         formData,
         { withCredentials: true }
       );
