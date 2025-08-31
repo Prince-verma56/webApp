@@ -1,45 +1,63 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://web-app-kohl-theta.vercel.app/api/products';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-const apiRequest = async (url, method, data = null) => {
+// Helper function for API requests with file uploads
+const apiRequest = async (endpoint, method, data = null, isMultipart = false) => {
+  const url = `${API_URL}${endpoint}`;
+  const headers = {};
+  let body;
+
+  if (isMultipart) {
+    body = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === 'images') {
+        // Append each file to FormData
+        Array.from(value).forEach((file) => {
+          body.append('images', file);
+        });
+      } else {
+        body.append(key, value);
+      }
+    });
+  } else {
+    headers['Content-Type'] = 'application/json';
+    body = data ? JSON.stringify(data) : null;
+  }
+
   const options = {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: data ? JSON.stringify(data) : null,
+    headers,
+    body,
+    credentials: 'include', // Include cookies for authentication if needed
   };
 
   try {
     const response = await fetch(url, options);
+    const responseData = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `API error: ${response.status}`);
+      throw new Error(responseData.message || `API error: ${response.status}`);
     }
-    // Check if the response has content before parsing JSON
-    const text = await response.text();
-    return text ? JSON.parse(text) : {};
+
+    return responseData;
   } catch (error) {
-    console.error(`API Request Failed: ${error.message}`);
+    console.error('API request failed:', error);
     throw error;
   }
 };
 
-// Fetch all products
+// Product API functions
 export const fetchProducts = async () => {
-  return apiRequest(API_URL, 'GET');
+  return apiRequest('/products', 'GET');
 };
 
-// Create a new product
 export const createProduct = async (productData) => {
-  return apiRequest(API_URL, 'POST', productData);
+  return apiRequest('/products', 'POST', productData, true);
 };
 
-// Update an existing product
 export const updateProduct = async (id, updatedFields) => {
-  return apiRequest(`${API_URL}/${id}`, 'PUT', updatedFields);
+  return apiRequest(`/products/${id}`, 'PUT', updatedFields, true);
 };
 
-// Delete a product
 export const deleteProduct = async (id) => {
-  return apiRequest(`${API_URL}/${id}`, 'DELETE');
+  return apiRequest(`/products/${id}`, 'DELETE');
 };

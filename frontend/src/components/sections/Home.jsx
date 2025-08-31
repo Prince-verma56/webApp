@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
 import {
+  User,
+  Calendar,
+  Activity,
+  FileText,
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
   LineChart,
   BookOpen,
   Users,
@@ -12,423 +17,538 @@ import {
   Twitter,
   Instagram,
   Leaf,
+  Mail,
+  Home as HomeIcon,
+  Heart,
+  Brain,
+  Shield,
+  Clock,
+  ArrowRight,
+  ChevronDown,
+  Menu,
+  X,
+  Cloud,
+  Sun,
+  Moon
 } from "lucide-react";
 
-// === Color system (from your palette) ===
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+
+// Mental health-friendly color palette
 const COLORS = {
-  bg: "#776982",
-  card: "#C7B9D6",
-  text: "#4B4155",
-  highlight: "#9B6EB4",
-  lightCard: "#F8F5FB",
-  border: "#A597D4",
+  primary: "#5B6BF0",       // Calming blue
+  primaryLight: "#8B9AF8",  // Lighter blue
+  secondary: "#7C3AED",     // Soothing purple
+  accent: "#10B981",        // Renewing green
+  background: "#F9FAFB",    // Light background
+  text: "#1F2937",          // Dark gray for text
+  textLight: "#6B7280",     // Light gray for secondary text
+  card: "#FFFFFF",          // White for cards
+  border: "#E5E7EB",        // Light border
+  highlight: "#8B5CF6",     // Highlight purple
 };
 
-export default function PremiumLandingPage() {
-  // refs for animations
-  const heroRef = useRef(null);
-  const heroTitleRef = useRef(null);
-  const heroCtaRef = useRef(null);
-  const featuresRef = useRef(null);
-  const stepsRef = useRef(null);
-  const testimonialsRef = useRef(null);
-  const compareRef = useRef(null);
-  const ctaRef = useRef(null);
+const HeroSection = () => {
+  const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // This function handles the smooth scroll when a nav link is clicked.
-    const handleSmoothScroll = (event) => {
-      event.preventDefault();
-      const targetId = event.currentTarget.getAttribute("href").substring(1);
-      const targetElement = document.getElementById(targetId);
-
-      if (targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 70,
-          behavior: "smooth",
-        });
-      }
-    };
-
-    const navLinks = document.querySelectorAll("nav a");
-    navLinks.forEach((link) => {
-      link.addEventListener("click", handleSmoothScroll);
-    });
-
-    return () => {
-      navLinks.forEach((link) => {
-        link.removeEventListener("click", handleSmoothScroll);
-      });
-    };
+    setIsVisible(true);
   }, []);
 
-  useEffect(() => {
+  return (
+    <section className="py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-10">
+        <div className="absolute top-20 left-10 animate-float">
+          <Cloud className="w-20 h-20 text-blue-300" />
+        </div>
+        <div className="absolute top-40 right-20 animate-float" style={{ animationDelay: '1s' }}>
+          <Sun className="w-16 h-16 text-yellow-200" />
+        </div>
+        <div className="absolute bottom-20 left-1/4 animate-float" style={{ animationDelay: '2s' }}>
+          <Moon className="w-14 h-14 text-purple-200" />
+        </div>
+      </div>
 
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    
-    if (!gsap || !ScrollTrigger) {
-        console.error("GSAP or ScrollTrigger not loaded. Animations will not work.");
-        return;
-    }
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div className={`transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+            Start your <span className="text-purple-600">journey</span> to better mental wellbeing
+          </h1>
+          
+          <p className="mt-6 text-lg text-gray-600 max-w-xl">
+            MindSpace brings short guided practices, daily tracking and actionable insights together in one safe place — built to help you feel calmer, clearer and more consistent.
+          </p>
+          
+          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <Button 
+              className="px-8 py-3 text-lg font-medium transition-all hover:shadow-lg"
+              style={{ backgroundColor: COLORS.primary, color: 'white' }}
+              size="lg"
+              onClick={() => navigate("/stepper")}
+            >
+              Get Started
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            
+            <Button
+              variant="outline"
+              className="px-8 py-3 text-lg font-medium border-2"
+              style={{ borderColor: COLORS.primary, color: COLORS.primary }}
+            >
+              Learn More
+            </Button>
+          </div>
+        </div>
+        
+        <div className={`transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+            <div className="flex items-center mb-6">
+              <div className="p-2 rounded-full bg-blue-100 mr-3">
+                <Activity className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800">Quick Snapshot</h3>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <Card className="bg-blue-50 border-blue-100">
+                <CardContent className="p-4">
+                  <div className="text-sm text-blue-600">Daily Mood</div>
+                  <div className="text-xl font-bold text-gray-800">Good</div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-purple-50 border-purple-100">
+                <CardContent className="p-4">
+                  <div className="text-sm text-purple-600">Streak</div>
+                  <div className="text-xl font-bold text-gray-800">6 days</div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <Card className="bg-green-50 border-green-100">
+              <CardContent className="p-4">
+                <div className="flex items-center mb-2">
+                  <Heart className="h-4 w-4 text-green-600 mr-2" />
+                  <div className="text-sm font-medium text-green-600">Tip of the day</div>
+                </div>
+                <div className="text-base text-gray-700">
+                  Take 3 mindful breaths before starting your day.
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
-      tl.from(heroRef.current, { opacity: 0, duration: 0.6, y: 20 });
-      tl.from(heroTitleRef.current, { opacity: 0, y: 30, duration: 0.8 }, "-=0.15");
-      tl.from(heroCtaRef.current, { opacity: 0, y: 20, duration: 0.6 }, "-=0.45");
-
-      gsap.from(featuresRef.current.children, {
-        opacity: 0,
-        y: 30,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: featuresRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(stepsRef.current.children, {
-        opacity: 0,
-        x: -30,
-        duration: 0.7,
-        stagger: 0.25,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: stepsRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(testimonialsRef.current.children, {
-        opacity: 0,
-        y: 30,
-        duration: 0.7,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: testimonialsRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(compareRef.current, {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: compareRef.current,
-          start: "top 85%",
-        },
-      });
-
-      gsap.from(ctaRef.current, {
-        opacity: 0,
-        scale: 0.98,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ctaRef.current,
-          start: "top 90%",
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
- 
+const FeaturesSection = () => {
   const features = [
     {
       icon: <LineChart className="h-10 w-10" />,
       title: "Daily Mood Tracking",
       text: "Capture your mood and understand patterns over time.",
+      color: "bg-blue-100 text-blue-600"
     },
     {
       icon: <BookOpen className="h-10 w-10" />,
       title: "Guided Practices",
       text: "Short practices to help you breathe, relax and refocus.",
+      color: "bg-purple-100 text-purple-600"
     },
     {
       icon: <Users className="h-10 w-10" />,
       title: "Expert Support",
       text: "Access resources and community to support your journey.",
+      color: "bg-green-100 text-green-600"
     },
   ];
 
+  return (
+    <section className="py-16 px-4 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Powerful tools, designed for habit
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Small daily actions lead to big changes — we make them simple, measurable and kind.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <div 
+              key={index} 
+              className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-2"
+            >
+              <div className={`inline-flex p-3 rounded-xl mb-6 ${feature.color}`}>
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {feature.text}
+              </p>
+              <Button variant="ghost" className="p-0 text-blue-600 hover:text-blue-700 hover:bg-transparent">
+                Explore
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const HowItWorksSection = () => {
   const steps = [
-    "Answer a short questionnaire so we understand your needs",
-    "Get personalized suggestions & short guided sessions",
-    "Track progress and adapt with data-driven insights",
+    {
+      title: "Step 1",
+      description: "Answer a short questionnaire so we understand your needs",
+      icon: <FileText className="h-6 w-6" />
+    },
+    {
+      title: "Step 2",
+      description: "Get personalized suggestions & short guided sessions",
+      icon: <Brain className="h-6 w-6" />
+    },
+    {
+      title: "Step 3",
+      description: "Track progress and adapt with data-driven insights",
+      icon: <LineChart className="h-6 w-6" />
+    },
   ];
 
+  return (
+    <section className="py-16 px-4 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            How it works
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Simple, guided, science-aligned steps to help you build better mental habits.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {steps.map((step, index) => (
+            <div key={index} className="relative">
+              {index < steps.length - 1 && (
+                <div className="hidden md:block absolute top-12 left-2/3 w-full h-0.5 bg-blue-200"></div>
+              )}
+              <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center relative z-10">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-6">
+                  {step.icon}
+                </div>
+                <div className="text-sm font-semibold text-blue-600 mb-2">
+                  {step.title}
+                </div>
+                <div className="text-lg font-medium text-gray-800">
+                  {step.description}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const TestimonialsSection = () => {
   const testimonials = [
     {
       quote: "MindSpace helped me be aware of my mood triggers — small practices made a big difference.",
       author: "Asha R.",
       role: "Designer",
+      rating: 5
     },
     {
       quote: "The daily check-ins are gentle and effective. Highly recommended.",
       author: "Rahul M.",
       role: "Engineer",
+      rating: 5
     },
     {
       quote: "Simple, practical, and real — the best stress helper I've tried.",
       author: "Neha P.",
       role: "Teacher",
+      rating: 4
     },
   ];
 
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }).map((_, i) => (
+      <Star 
+        key={i} 
+        className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} 
+      />
+    ));
+  };
+
   return (
-    <div style={{ backgroundColor: COLORS.bg, color: COLORS.text, minHeight: "100vh" }}>
-      <style>{`
-        :root{
-          --bg:${COLORS.bg};
-          --card:${COLORS.card};
-          --text:${COLORS.text};
-          --highlight:${COLORS.highlight};
-          --lightCard:${COLORS.lightCard};
-          --border:${COLORS.border};
-        }
-      `}</style>
-      
-      {/*
-      */}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-
-      <header
-        className="sticky top-0 z-50"
-        style={{ background: COLORS.lightCard, borderBottom: `1px solid ${COLORS.border}` }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-3">
-            <div style={{ color: COLORS.highlight }} className="text-2xl">
-              <a href="#hero"><Leaf /></a>
-            </div>
-            <div className="font-semibold" style={{ color: COLORS.text }}>
-              <h1 className="text-2xl font-semibold">Sahaj</h1>
-            </div>
-          </div>
-
-          <nav className="flex items-center gap-3">
-            <a className="text-sm text-slate-700 hover:underline" href="#features">Features</a>
-            <a className="text-sm text-slate-700 hover:underline" href="#how">How it works</a>
-            <a className="text-sm text-slate-700 hover:underline" href="#testimonials">Stories</a>
-            <Button variant="outline" className="ml-3" style={{ borderColor: COLORS.border, color: COLORS.text }}>
-              Sign Up
-            </Button>
-            <Button style={{ backgroundColor: COLORS.highlight, color: "white" }} className="ml-2">
-              Get Started
-            </Button>
-          </nav>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section ref={heroRef} id="hero" className="max-w-7xl mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 ref={heroTitleRef} className="text-5xl md:text-6xl font-extrabold leading-tight" style={{ color: COLORS.lightCard }}>
-              Start your <span style={{ color: COLORS.card }}>journey</span> to better mental wellbeing
-            </h1>
-            <p className="mt-6 max-w-xl text-lg" style={{ color: COLORS.lightCard }}>
-              MindSpace brings short guided practices, daily tracking and actionable insights together in one safe place —
-              built to help you feel calmer, clearer and more consistent.
-            </p>
-
-            <div ref={heroCtaRef} className="mt-8 flex gap-4 transition-colors duration-75">
-              <Button style={{ backgroundColor: COLORS.highlight, color: "black" }} size="lg">Get Started</Button>
-              <Button variant="ghost" style={{ borderColor: COLORS.border, color: COLORS.text }}>Learn More</Button>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div style={{
-              background: `linear-gradient(180deg, ${COLORS.card}, rgba(255,255,255,0.06))`,
-              border: `1px solid ${COLORS.border}`,
-            }} className="rounded-3xl p-6 shadow-xl">
-              <div className="flex flex-col gap-4">
-                <div className="text-white font-semibold" style={{ color: COLORS.text }}>
-                  Quick Snapshot
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <Card style={{ background: COLORS.lightCard }}>
-                    <CardContent>
-                      <div className="text-sm">Daily Mood</div>
-                      <div className="text-xl font-bold">Good</div>
-                    </CardContent>
-                  </Card>
-                  <Card style={{ background: COLORS.lightCard }}>
-                    <CardContent>
-                      <div className="text-sm">Streak</div>
-                      <div className="text-xl font-bold">6 days</div>
-                    </CardContent>
-                  </Card>
-                </div>
-                <Card style={{ background: COLORS.lightCard }}>
-                  <CardContent>
-                    <div className="text-sm text-slate-700">Tip of the day</div>
-                    <div className="text-base">Take 3 mindful breaths before starting your day.</div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            <svg className="absolute -bottom-8 -right-8" width="240" height="140">
-              <defs>
-                <linearGradient id="g" x1="0" x2="1">
-                  <stop offset="0%" stopColor={COLORS.highlight} stopOpacity="0.14" />
-                  <stop offset="100%" stopColor={COLORS.card} stopOpacity="0.06" />
-                </linearGradient>
-              </defs>
-              <rect width="240" height="140" rx="20" fill="url(#g)" />
-            </svg>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section id="features" className="max-w-7xl mx-auto px-6 py-16">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold" style={{ color: COLORS.lightCard }}>Powerful tools, designed for habit</h2>
-          <p className="max-w-2xl mx-auto mt-2" style={{ color: COLORS.lightCard }}>
-            Small daily actions lead to big changes — we make them simple, measurable and kind.
-          </p>
-        </div>
-
-        <div ref={featuresRef} className="grid md:grid-cols-3 gap-6">
-          {features.map((f, i) => (
-            <Card
-              key={i}
-              className="p-6 rounded-2xl hover:shadow-2xl transition transform hover:-translate-y-3"
-              style={{
-                background: "white",
-                border: `1px solid ${COLORS.border}`,
-              }}
-            >
-              <div style={{ color: COLORS.highlight }} className="mb-4">{f.icon}</div>
-              <h3 className="text-xl font-semibold mb-2" style={{ color: COLORS.text }}>{f.title}</h3>
-              <p style={{ color: COLORS.text }}>{f.text}</p>
-              <div className="mt-4">
-                <Button variant="ghost" style={{ color: COLORS.highlight }}>Explore</Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section id="how" className="max-w-7xl mx-auto px-6 py-16" style={{ background: COLORS.lightCard }}>
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold" style={{ color: COLORS.text }}>How it works</h2>
-          <p className="max-w-2xl mx-auto mt-2" style={{ color: COLORS.text }}>
-            Simple, guided, science-aligned steps to help you build better mental habits.
-          </p>
-        </div>
-
-        <div ref={stepsRef} className="grid md:grid-cols-3 gap-6">
-          {steps.map((s, i) => (
-            <div
-              key={i}
-              className="p-6 rounded-xl"
-              style={{ background: COLORS.card, border: `1px solid ${COLORS.border}` }}
-            >
-              <div className="text-sm font-semibold mb-2" style={{ color: COLORS.highlight }}>Step {i + 1}</div>
-              <div className="text-lg font-medium" style={{ color: COLORS.text }}>{s}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="testimonials" className="max-w-7xl mx-auto px-6 py-16">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold" style={{ color: COLORS.lightCard }}>Trusted by users</h2>
-          <p className="max-w-2xl mx-auto mt-2" style={{ color: COLORS.lightCard }}>
+    <section className="py-16 px-4 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Trusted by users
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Real stories from people who used small daily practices to get big results.
           </p>
         </div>
-
-        <div ref={testimonialsRef} className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <Card
-              key={i}
-              className="p-6 rounded-2xl shadow"
-              style={{ background: COLORS.lightCard, border: `1px solid ${COLORS.border}` }}
-            >
-              <CardContent>
-                <div className="mb-4">
-                  <Star style={{ color: COLORS.highlight }} />{" "}
-                </div>
-                <p className="italic mb-4" style={{ color: COLORS.text }}>{t.quote}</p>
-                <div className="font-semibold" style={{ color: COLORS.text }}>{t.author}</div>
-                <div className="text-xs text-muted-foreground">{t.role}</div>
-              </CardContent>
-            </Card>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+              <div className="flex mb-4">
+                {renderStars(testimonial.rating)}
+              </div>
+              <p className="text-gray-600 italic mb-6">
+                "{testimonial.quote}"
+              </p>
+              <div>
+                <div className="font-semibold text-gray-900">{testimonial.author}</div>
+                <div className="text-sm text-gray-500">{testimonial.role}</div>
+              </div>
+            </div>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+};
 
-      <section ref={compareRef} className="max-w-7xl mx-auto px-6 py-16" style={{ background: COLORS.lightCard }}>
-        <div className="mb-6 text-center">
-          <h2 className="text-3xl font-bold" style={{ color: COLORS.text }}>MindSpace vs Traditional</h2>
+const ComparisonSection = () => {
+  const mindspaceBenefits = [
+    "Affordable",
+    "Flexible",
+    "Daily small practices",
+    "On-demand resources",
+  ];
+
+  const traditionalCons = [
+    "Expensive",
+    "Weekly only",
+    "Limited access between sessions",
+  ];
+
+  return (
+    <section className="py-16 px-4 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            MindSpace vs Traditional
+          </h2>
         </div>
-
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          <div className="p-6 rounded-xl" style={{ background: COLORS.card, border: `1px solid ${COLORS.border}` }}>
-            <h3 style={{ color: COLORS.text }} className="font-semibold mb-4">MindSpace</h3>
-            <ul className="space-y-3">
-              {["Affordable", "Flexible", "Daily small practices", "On-demand resources"].map((p, i) => (
-                <li key={i} className="flex gap-3 items-center">
-                  <CheckCircle style={{ color: COLORS.highlight }} /> <span style={{ color: COLORS.text }}>{p}</span>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-white p-8 rounded-2xl border border-green-100 shadow-sm">
+            <div className="flex items-center mb-6">
+              <div className="p-2 rounded-full bg-green-100 mr-4">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900">MindSpace</h3>
+            </div>
+            <ul className="space-y-4">
+              {mindspaceBenefits.map((benefit, index) => (
+                <li key={index} className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
+                  <span className="text-gray-700">{benefit}</span>
                 </li>
               ))}
             </ul>
           </div>
-
-          <div className="p-6 rounded-xl" style={{ background: "white", border: `1px solid ${COLORS.border}` }}>
-            <h3 style={{ color: COLORS.text }} className="font-semibold mb-4">Traditional</h3>
-            <ul className="space-y-3">
-              {["Expensive", "Weekly only", "Limited access between sessions"].map((p, i) => (
-                <li key={i} className="flex gap-3 items-center">
-                  <XCircle style={{ color: "#e74c3c" }} /> <span style={{ color: COLORS.text }}>{p}</span>
+          
+          <div className="bg-white p-8 rounded-2xl border border-red-100 shadow-sm">
+            <div className="flex items-center mb-6">
+              <div className="p-2 rounded-full bg-red-100 mr-4">
+                <XCircle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900">Traditional</h3>
+            </div>
+            <ul className="space-y-4">
+              {traditionalCons.map((point, index) => (
+                <li key={index} className="flex items-center">
+                  <XCircle className="h-5 w-5 text-red-500 mr-3" />
+                  <span className="text-gray-700">{point}</span>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+};
 
-      <section ref={ctaRef} className="max-w-7xl mx-auto px-6 py-16">
-        <div className="rounded-2xl p-10 text-center" style={{ background: COLORS.highlight }}>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">Ready to try MindSpace?</h2>
-          <p className="text-white/90 mt-4 max-w-2xl mx-auto">Start with a free 7-day trial and see how daily micro-practices can help your mood and focus.</p>
-          <div className="mt-6 flex justify-center gap-4">
-            <Button style={{ background: "white", color: COLORS.highlight }} size="lg">Start Free Trial</Button>
-            <Button variant="outline" style={{ borderColor: "rgba(255,255,255,0.2)", color: "black" }}>Contact Sales</Button>
+const CTASection = () => {
+  return (
+    <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
+      <div className="max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          Ready to try MindSpace?
+        </h2>
+        <p className="text-lg text-blue-100 max-w-2xl mx-auto mb-8">
+          Start with a free 7-day trial and see how daily micro-practices can help your mood and focus.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button 
+            className="px-8 py-3 text-lg font-medium bg-white text-blue-600 hover:bg-gray-100"
+            size="lg"
+          >
+            Start Free Trial
+          </Button>
+          <Button 
+            variant="outline" 
+            className="px-8 py-3 text-lg font-medium border-2 border-white text-white hover:bg-white hover:text-blue-600"
+            size="lg"
+          >
+            Contact Sales
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-white py-12 px-4">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+        <div>
+          <div className="flex items-center mb-4">
+            <Leaf className="h-6 w-6 text-green-400 mr-2" />
+            <span className="text-xl font-bold">MindSpace</span>
+          </div>
+          <p className="text-gray-400">
+            Better daily support for mental wellbeing
+          </p>
+        </div>
+        
+        <div>
+          <h3 className="font-semibold mb-4">Product</h3>
+          <ul className="space-y-2 text-gray-400">
+            <li>Features</li>
+            <li>Pricing</li>
+            <li>Testimonials</li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 className="font-semibold mb-4">Resources</h3>
+          <ul className="space-y-2 text-gray-400">
+            <li>Blog</li>
+            <li>Guides</li>
+            <li>Support</li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 className="font-semibold mb-4">Connect</h3>
+          <div className="flex space-x-4">
+            <Facebook className="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
+            <Twitter className="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
+            <Instagram className="h-5 w-5 text-gray-400 hover:text-white cursor-pointer" />
           </div>
         </div>
-      </section>
+      </div>
+      
+      <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+        © {new Date().getFullYear()} MindSpace — All rights reserved
+      </div>
+    </footer>
+  );
+};
 
-      <footer style={{ background: COLORS.text, color: "white" }} className="py-10 mt-8">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-6 items-center">
-          <div>
-            <div className="text-lg font-bold">MindSpace</div>
-            <div className="text-sm mt-1">Better daily support for mental wellbeing</div>
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
+  return (
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4">
+          <div className="flex items-center">
+            <Leaf className="h-8 w-8 text-blue-600 mr-2" />
+            <span className="text-xl font-bold text-gray-900">MindSpace</span>
           </div>
-
-          <div className="flex items-center gap-4">
-            <Facebook className="w-6 h-6 cursor-pointer" />
-            <Twitter className="w-6 h-6 cursor-pointer" />
-            <Instagram className="w-6 h-6 cursor-pointer" />
+          
+          <div className="hidden md:flex space-x-8">
+            <a href="#features" className="text-gray-700 hover:text-blue-600">Features</a>
+            <a href="#how-it-works" className="text-gray-700 hover:text-blue-600">How It Works</a>
+            <a href="#testimonials" className="text-gray-700 hover:text-blue-600">Testimonials</a>
+            <a href="#pricing" className="text-gray-700 hover:text-blue-600">Pricing</a>
+          </div>
+          
+          <div className="hidden md:flex items-center space-x-4">
+            <Button variant="ghost" className="text-gray-700">Login</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">Sign Up</Button>
+          </div>
+          
+          <div className="md:hidden">
+            <Button variant="ghost" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
         </div>
+        
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-gray-200">
+            <div className="flex flex-col space-y-4">
+              <a href="#features" className="text-gray-700 hover:text-blue-600">Features</a>
+              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600">How It Works</a>
+              <a href="#testimonials" className="text-gray-700 hover:text-blue-600">Testimonials</a>
+              <a href="#pricing" className="text-gray-700 hover:text-blue-600">Pricing</a>
+              <div className="pt-4 flex flex-col space-y-3">
+                <Button variant="outline" className="w-full">Login</Button>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Sign Up</Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+};
 
-        <div className="text-center text-xs mt-6 text-slate-200/80">© {new Date().getFullYear()} MindSpace — All rights reserved</div>
-      </footer>
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-white">
+      <Header />
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <TestimonialsSection />
+      <ComparisonSection />
+      <CTASection />
+      <Footer />
+      
+      <style jsx global>{`
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 }
